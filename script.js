@@ -4,7 +4,7 @@ const width = +svg.attr("width");
 const height = +svg.attr("height");
 
 const margin = {
-    top: 20,
+    top: 40,
     left: 100,
     right: 20,
     bottom: 50
@@ -30,11 +30,35 @@ const render = data => {
     const g = svg.append('g')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    g.append('g').call(d3.axisLeft(yScale))
-    g.append('g')
-    .attr("transform", `translate(0, ${innerHeight})`)
-    .call(d3.axisBottom(xScale));
-    
+    const xAxis = d3.axisBottom(xScale)
+        .tickFormat(d3.format(".2s"))
+        .tickSize(-innerHeight)
+
+    const yAxisGroup = g.append('g')
+        .call(d3.axisLeft(yScale));
+    const xAxisGroup = g.append('g')
+        .call(xAxis)
+        .attr("transform", `translate(0, ${innerHeight})`)
+        
+    yAxisGroup
+        .selectAll('.domain, .tick line')
+        .remove();
+
+    xAxisGroup
+        .select('.domain')
+        .remove()
+        .selectAll(".tick:not(:first-of-type) line")
+        .attr("stroke", "#66ffcc")
+        .attr("stroke-dasharray", "2,2");
+
+
+    xAxisGroup.append("text")
+        .text('Population')
+        .attr("fill", "black")
+        .attr("x", `${(innerWidth-margin.right)/2}`)
+        .attr("y",40)
+        .attr('class', "axes-lable")
+
     g.selectAll('rect')
         .data(data)
         .enter()
@@ -42,10 +66,17 @@ const render = data => {
         .attr('y', d => yScale(yVal(d)))
         .attr("width", d => xScale(xVal(d)))
         .attr("height", yScale.bandwidth())
-        
+
+    g.append('text')
+        .attr('y', '-10')
+        .text('Population (by estimate) as of May 1, 2019')
+        .attr("class", "char-title")
+
 }
 
 d3.csv('./data.csv').then(data => {
     data.forEach(d => d.population = +d.population)
+    data.sort((a,b)=>a.population-b.population)
+    console.log(data)
     render(data)
 })
