@@ -1,1 +1,1 @@
-This bar chart shows population of all Ukrainian regions. The data comes from the year 2019 estimate in [State Statistics Service of Ukraine] (http://database.ukrcensus.gov.ua/PXWEB2007/popul_eng.htm)
+This bar chart shows population of all Ukrainian regions. The data comes from the year 2019 estimate in [State Statistics Service of Ukraine](http://database.ukrcensus.gov.ua/PXWEB2007/popul_eng.htm)
